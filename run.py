@@ -1,50 +1,7 @@
 #!/usr/bin/env python3
 import argparse
-import hashlib
-import sys
+from services import HashCracker
 
-
-def compute_hash(word: str, algorithm: str) -> str:
-    """
-    Compute the hash of a given word using the specified algorithm.
-    """
-    # Remove any trailing whitespace/newlines and encode the word
-    word = word.strip().encode('utf-8')
-    
-    if algorithm == 'md5':
-        return hashlib.md5(word).hexdigest()
-    elif algorithm == 'sha1':
-        return hashlib.sha1(word).hexdigest()
-    elif algorithm == 'sha256':
-        return hashlib.sha256(word).hexdigest()
-    else:
-        raise ValueError(f"Unsupported algorithm: {algorithm}")
-
-def crack_hash(target_hash: str, wordlist_path: str, algorithm: str) -> str:
-    """
-    Attempt to crack the target_hash by comparing it to the hash of each word
-    in the wordlist using the specified algorithm.
-    
-    Returns the matching word if found, otherwise returns None.
-    """
-    try:
-        with open(wordlist_path, 'r', encoding='utf-8') as file:
-            for line_number, word in enumerate(file, start=1):
-                candidate = word.strip()
-                if not candidate:
-                    continue  # Skip empty lines
-                candidate_hash = compute_hash(candidate, algorithm)
-                if candidate_hash == target_hash:
-                    print(f"[+] Found the match on line {line_number}")
-                    return candidate
-    except FileNotFoundError:
-        print(f"Error: The wordlist file '{wordlist_path}' was not found.")
-        sys.exit(1)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
-    
-    return None
 
 def main():
     parser = argparse.ArgumentParser(
@@ -67,7 +24,8 @@ def main():
     args = parser.parse_args()
 
     print(f"[*] Starting hash cracking using {args.algorithm.upper()} algorithm...")
-    result = crack_hash(args.hash, args.wordlist, args.algorithm)
+    cracker = HashCracker(args.hash, args.wordlist, args.algorithm)
+    result = cracker.crack()
 
     if result:
         print(f"[+] Success! The hash corresponds to: '{result}'")
