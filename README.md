@@ -1,6 +1,6 @@
-# Hash Cracker
+# Hashbuster
 
-Hash Cracker is a Python-based tool designed to help you crack MD5, SHA1, or SHA256 hashes using a wordlist. **This tool is intended for educational purposes and authorized security testing only. Unauthorized use is illegal and unethical.**
+Hashbuster is a Python-based tool designed to help you crack MD5, SHA1, or SHA256 hashes using a wordlist. **This tool is intended for educational purposes and authorized security testing only. Unauthorized use is illegal and unethical.**
 
 ## Features
 
